@@ -1,8 +1,14 @@
 let dragX1 = null
 let dragX2 = null
 // const DRAG_THRESHOLD = 100
-chrome.storage.local.set({ DRAG_THRESHOLD: 100 }, _ => {
-  console.log('DRAG-TO-GO-BACK Threshold: 100 Pixels')
+chrome.storage.local.get('DRAG_THRESHOLD', data => {
+  if (data.DRAG_THRESHOLD === undefined) {
+    chrome.storage.local.set({ DRAG_THRESHOLD: 100 }, _ => {
+      console.log('DRAG-TO-GO-BACK Threshold: 100 Pixels')
+    })
+  } else {
+    console.log(`DRAG-TO-GO-BACK Threshold: ${data.DRAG_THRESHOLD} Pixels`)
+  }
 })
 
 window.addEventListener('mousedown', event => {
