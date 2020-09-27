@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Drag to Go Back",
   "version": "1.0.0",
-  "description": "Navigate Browser (Back/Forward) by Wheel-Click Dragging",
+  "description": "Navigate Browser (Back/Forward) by Left-Click Dragging",
   "permissions": [
     "storage"
   ],
