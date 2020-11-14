@@ -39,7 +39,7 @@ const logger = (logSwitch, message) => {
   }
 }
 
-chrome.storage.local.get(['DRAG_THRESHOLD', 'DRAG_TIME_LIMIT_IN_MILLISECONDS', 'DRAG_LOG_SWITCH', ], data => {
+chrome.storage.local.get(['DRAG_THRESHOLD', 'DRAG_TIME_LIMIT_IN_MILLISECONDS', 'DRAG_LOG_SWITCH',], data => {
   if (data.DRAG_LOG_SWITCH === undefined) {
     chrome.storage.local.set({ DRAG_LOG_SWITCH: 'ON' }, _ => {
       logger(data.DRAG_LOG_SWITCH, 'DRAG-TO-GO-BACK Log Switch: ON')
@@ -65,7 +65,7 @@ chrome.storage.local.get(['DRAG_THRESHOLD', 'DRAG_TIME_LIMIT_IN_MILLISECONDS', '
   }
 })
 
-window.addEventListener('mousedown', event => {
+const onMousedown = event => {
   // const metaKey = navigator.platform.includes('Mac') ? event.metaKey : event.ctrlKey
   // if (event.button === 0 && metaKey) {
   //   dragX1 = event.clientX
@@ -74,9 +74,9 @@ window.addEventListener('mousedown', event => {
     dragX1 = event.clientX
     time1InMilliseconds = Date.now()
   }
-})
+}
 
-window.addEventListener('mouseup', event => {
+const onMouseup = event => {
   if (event.button === 0 && dragX1 !== null && time1InMilliseconds !== null) {
     dragX2 = event.clientX
     time2InMilliseconds = Date.now()
@@ -84,7 +84,7 @@ window.addEventListener('mouseup', event => {
     const deltaX = Math.abs(dragX2 - dragX1)
     const deltaTime = time2InMilliseconds - time1InMilliseconds
 
-    chrome.storage.local.get(['DRAG_THRESHOLD', 'DRAG_TIME_LIMIT_IN_MILLISECONDS', 'DRAG_LOG_SWITCH', ], data => {
+    chrome.storage.local.get(['DRAG_THRESHOLD', 'DRAG_TIME_LIMIT_IN_MILLISECONDS', 'DRAG_LOG_SWITCH',], data => {
       const DRAG_THRESHOLD = data.DRAG_THRESHOLD
       const DRAG_TIME_LIMIT_IN_MILLISECONDS = data.DRAG_TIME_LIMIT_IN_MILLISECONDS
       const DRAG_LOG_SWITCH = data.DRAG_LOG_SWITCH
@@ -119,4 +119,16 @@ window.addEventListener('mouseup', event => {
       }
     })
   }
-})
+}
+
+window.addEventListener('mousedown', onMousedown)
+
+window.addEventListener('mouseup', onMouseup)
+
+const onBeforeunload = event => {
+  window.removeEventListener('mousedown', onMousedown)
+  window.removeEventListener('mouseup', onMouseup)
+  window.removeEventListener('beforeunload', onBeforeunload)
+}
+
+window.addEventListener('beforeunload', onBeforeunload)

@@ -32,3 +32,26 @@ for (let input of dragTimeLimitInputs) {
 for (let input of dragLogSwitchInputs) {
   input.addEventListener('input', updateLogSwitch)
 }
+
+const onBeforeunload = event => {
+  // Cancel the event as stated by the standard.
+  // event.preventDefault()
+  // Older browsers supported custom message
+  // event.returnValue = ''
+  // chrome.tabs.create({}, () => console.log('hi'))
+  for (let input of dragThresholdInputs) {
+    input.removeEventListener('input', updateThreshold)
+  }
+
+  for (let input of dragTimeLimitInputs) {
+    input.removeEventListener('input', updateTimeLimit)
+  }
+
+  for (let input of dragLogSwitchInputs) {
+    input.removeEventListener('input', updateLogSwitch)
+  }
+
+  window.removeEventListener('beforeunload', onBeforeunload)
+}
+
+window.addEventListener('beforeunload', onBeforeunload)
